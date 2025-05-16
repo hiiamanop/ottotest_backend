@@ -12,6 +12,7 @@ WORKDIR /app
 
 COPY --from=builder /app/ottotest_backend .
 COPY migrations ./migrations
+COPY docs ./docs
 EXPOSE 8080
 
 CMD ["./ottotest_backend"]

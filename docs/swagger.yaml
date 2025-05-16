@@ -1,0 +1,397 @@
+basePath: /
+definitions:
+  dto.BrandResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  dto.CreateBrandRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  dto.CreateCustomerRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      point_balance:
+        minimum: 0
+        type: integer
+    required:
+    - email
+    - name
+    - point_balance
+    type: object
+  dto.CreateRedemptionRequest:
+    properties:
+      customer_id:
+        type: integer
+      vouchers:
+        items:
+          $ref: '#/definitions/dto.RedemptionVoucher'
+        type: array
+    required:
+    - customer_id
+    - vouchers
+    type: object
+  dto.CreateVoucherRequest:
+    properties:
+      brand_id:
+        type: integer
+      description:
+        type: string
+      name:
+        type: string
+      point_cost:
+        type: integer
+    required:
+    - brand_id
+    - name
+    - point_cost
+    type: object
+  dto.CustomerResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      point_balance:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  dto.RedemptionItemResponse:
+    properties:
+      point_cost:
+        type: integer
+      quantity:
+        type: integer
+      voucher_id:
+        type: integer
+    type: object
+  dto.RedemptionResponse:
+    properties:
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/dto.RedemptionItemResponse'
+        type: array
+      status:
+        type: string
+      total_point:
+        type: integer
+      transaction_id:
+        type: integer
+    type: object
+  dto.RedemptionVoucher:
+    properties:
+      quantity:
+        minimum: 1
+        type: integer
+      voucher_id:
+        type: integer
+    required:
+    - quantity
+    - voucher_id
+    type: object
+  dto.VoucherResponse:
+    properties:
+      brand_id:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      point_cost:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Voucher Redemption Service
+  title: Ottotest Backend API
+  version: "1.0"
+paths:
+  /brand:
+    post:
+      consumes:
+      - application/json
+      description: Create a new brand
+      parameters:
+      - description: Create brand request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBrandRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.BrandResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new brand
+      tags:
+      - brand
+  /customer:
+    get:
+      consumes:
+      - application/json
+      description: Get customer details by ID
+      parameters:
+      - description: Customer ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.CustomerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get customer by ID
+      tags:
+      - customer
+    post:
+      consumes:
+      - application/json
+      description: Add a new customer
+      parameters:
+      - description: Customer Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateCustomerRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.CustomerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create customer
+      tags:
+      - customer
+  /transaction/redemption:
+    get:
+      consumes:
+      - application/json
+      description: Get redemption transaction detail by transaction ID
+      parameters:
+      - description: Transaction ID
+        in: query
+        name: transactionId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.RedemptionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get redemption transaction detail
+      tags:
+      - redemption
+    post:
+      consumes:
+      - application/json
+      description: Create a new redemption transaction
+      parameters:
+      - description: Create redemption request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateRedemptionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.RedemptionResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new redemption transaction
+      tags:
+      - redemption
+  /voucher:
+    get:
+      consumes:
+      - application/json
+      description: Get voucher details by ID
+      parameters:
+      - description: Voucher ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.VoucherResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get voucher by ID
+      tags:
+      - voucher
+    post:
+      consumes:
+      - application/json
+      description: Add a new voucher
+      parameters:
+      - description: Voucher Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateVoucherRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/dto.VoucherResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create voucher
+      tags:
+      - voucher
+  /voucher/brand:
+    get:
+      consumes:
+      - application/json
+      description: Get all vouchers for a specific brand
+      parameters:
+      - description: Brand ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.VoucherResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get vouchers by brand ID
+      tags:
+      - voucher
+swagger: "2.0"

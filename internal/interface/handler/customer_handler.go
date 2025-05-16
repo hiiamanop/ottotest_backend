@@ -19,7 +19,16 @@ func NewCustomerHandler(customerService *service.CustomerService) *CustomerHandl
 	return &CustomerHandler{customerService: customerService}
 }
 
-// POST /customer
+// CreateCustomer godoc
+// @Summary      Create customer
+// @Description  Add a new customer
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.CreateCustomerRequest true "Customer Data"
+// @Success      201  {object} dto.CustomerResponse
+// @Failure      400  {object} map[string]string
+// @Router       /customer [post]
 func (h *CustomerHandler) CreateCustomer(c *gin.Context) {
 	var req dto.CreateCustomerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -48,7 +57,17 @@ func (h *CustomerHandler) CreateCustomer(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
-// GET /customer?id={id}
+// GetCustomer godoc
+// @Summary      Get customer by ID
+// @Description  Get customer details by ID
+// @Tags         customer
+// @Accept       json
+// @Produce      json
+// @Param        id query int true "Customer ID"
+// @Success      200  {object} dto.CustomerResponse
+// @Failure      400  {object} map[string]string
+// @Failure      404  {object} map[string]string
+// @Router       /customer [get]
 func (h *CustomerHandler) GetCustomer(c *gin.Context) {
 	idStr := c.Query("id")
 	if idStr == "" {

@@ -17,7 +17,17 @@ func NewRedemptionHandler(redemptionService *service.RedemptionService) *Redempt
 	return &RedemptionHandler{redemptionService: redemptionService}
 }
 
-// POST /transaction/redemption
+// CreateRedemption godoc
+// @Summary Create a new redemption transaction
+// @Description Create a new redemption transaction
+// @Tags redemption
+// @Accept json
+// @Produce json
+// @Param request body dto.CreateRedemptionRequest true "Create redemption request"
+// @Success 201 {object} dto.RedemptionResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /transaction/redemption [post]
 func (h *RedemptionHandler) CreateRedemption(c *gin.Context) {
 	var req dto.CreateRedemptionRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -59,7 +69,17 @@ func (h *RedemptionHandler) CreateRedemption(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
-// GET /transaction/redemption?transactionId={id}
+// GetRedemptionDetail godoc
+// @Summary Get redemption transaction detail
+// @Description Get redemption transaction detail by transaction ID
+// @Tags redemption
+// @Accept json
+// @Produce json
+// @Param transactionId query int true "Transaction ID"
+// @Success 200 {object} dto.RedemptionResponse
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /transaction/redemption [get]
 func (h *RedemptionHandler) GetRedemptionDetail(c *gin.Context) {
 	trxIDStr := c.Query("transactionId")
 	trxID, err := strconv.ParseUint(trxIDStr, 10, 64)

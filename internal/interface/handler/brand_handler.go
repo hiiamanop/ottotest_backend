@@ -18,6 +18,17 @@ func NewBrandHandler(brandService *service.BrandService) *BrandHandler {
 	return &BrandHandler{brandService: brandService}
 }
 
+// CreateBrand godoc
+// @Summary Create a new brand
+// @Description Create a new brand
+// @Tags brand
+// @Accept json
+// @Produce json
+// @Param request body dto.CreateBrandRequest true "Create brand request"
+// @Success 201 {object} dto.BrandResponse
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /brand [post]
 func (h *BrandHandler) CreateBrand(c *gin.Context) {
 	var req dto.CreateBrandRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

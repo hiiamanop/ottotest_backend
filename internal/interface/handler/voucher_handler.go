@@ -19,7 +19,16 @@ func NewVoucherHandler(voucherService *service.VoucherService) *VoucherHandler {
 	return &VoucherHandler{voucherService: voucherService}
 }
 
-// POST /voucher
+// CreateVoucher godoc
+// @Summary      Create voucher
+// @Description  Add a new voucher
+// @Tags         voucher
+// @Accept       json
+// @Produce      json
+// @Param        request body dto.CreateVoucherRequest true "Voucher Data"
+// @Success      201  {object} dto.VoucherResponse
+// @Failure      400  {object} map[string]string
+// @Router       /voucher [post]
 func (h *VoucherHandler) CreateVoucher(c *gin.Context) {
 	var req dto.CreateVoucherRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -53,7 +62,17 @@ func (h *VoucherHandler) CreateVoucher(c *gin.Context) {
 	c.JSON(http.StatusCreated, resp)
 }
 
-// GET /voucher?id={voucher_id}
+// GetVoucherByID godoc
+// @Summary      Get voucher by ID
+// @Description  Get voucher details by ID
+// @Tags         voucher
+// @Accept       json
+// @Produce      json
+// @Param        id query uint true "Voucher ID"
+// @Success      200  {object} dto.VoucherResponse
+// @Failure      400  {object} map[string]string
+// @Failure      404  {object} map[string]string
+// @Router       /voucher [get]
 func (h *VoucherHandler) GetVoucherByID(c *gin.Context) {
 	idStr := c.Query("id")
 	id, err := strconv.ParseUint(idStr, 10, 64)
@@ -80,7 +99,17 @@ func (h *VoucherHandler) GetVoucherByID(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-// GET /voucher/brand?id={brand_id}
+// GetVouchersByBrand godoc
+// @Summary      Get vouchers by brand ID
+// @Description  Get all vouchers for a specific brand
+// @Tags         voucher
+// @Accept       json
+// @Produce      json
+// @Param        id query uint true "Brand ID"
+// @Success      200  {array} dto.VoucherResponse
+// @Failure      400  {object} map[string]string
+// @Failure      404  {object} map[string]string
+// @Router       /voucher/brand [get]
 func (h *VoucherHandler) GetVouchersByBrand(c *gin.Context) {
 	brandIDStr := c.Query("id")
 	brandID, err := strconv.ParseUint(brandIDStr, 10, 64)

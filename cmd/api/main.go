@@ -1,14 +1,23 @@
 package main
 
+// @title Ottotest Backend API
+// @version 1.0
+// @description API Voucher Redemption Service
+// @host localhost:8080
+// @BasePath /
+
 import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/hiiamanop/ottotest_backend/docs"
 	"github.com/hiiamanop/ottotest_backend/internal/domain/entity"
 	"github.com/hiiamanop/ottotest_backend/internal/infrastructure/persistence"
 	"github.com/hiiamanop/ottotest_backend/internal/interface/handler"
 	"github.com/hiiamanop/ottotest_backend/internal/usecase/service"
 	"github.com/hiiamanop/ottotest_backend/pkg/config"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -49,6 +58,8 @@ func main() {
 	r.GET("/transaction/redemption", redemptionHandler.GetRedemptionDetail)
 	r.POST("/customer", customerHandler.CreateCustomer)
 	r.GET("/customer", customerHandler.GetCustomer)
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	if err := r.Run(":8080"); err != nil {
 		panic(err)
