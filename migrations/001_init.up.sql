@@ -1,0 +1,44 @@
+CREATE TABLE brands (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE vouchers (
+    id SERIAL PRIMARY KEY,
+    brand_id INT NOT NULL REFERENCES brands(id),
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    point_cost INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    point_balance INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    customer_id INT NOT NULL REFERENCES customers(id),
+    total_point INT NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'SUCCESS',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE transaction_items (
+    id SERIAL PRIMARY KEY,
+    transaction_id INT NOT NULL REFERENCES transactions(id),
+    voucher_id INT NOT NULL REFERENCES vouchers(id),
+    quantity INT NOT NULL,
+    point_cost INT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
