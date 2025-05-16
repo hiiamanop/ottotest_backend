@@ -46,7 +46,7 @@ func (s *RedemptionService) Redeem(
 ) (*entity.Transaction, error) {
 	var trx *entity.Transaction
 
-	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	doLogic := func(tx *gorm.DB) error {
 		customer, err := s.customerRepo.FindByID(ctx, customerID)
 		if err != nil {
 			return err
@@ -71,8 +71,7 @@ func (s *RedemptionService) Redeem(
 		if customer.PointBalance < totalPoint {
 			return ErrInsufficientBalance
 		}
-		// Update customer balance
-		if err = s.customerRepo.UpdatePointBalance(ctx, customerID, customer.PointBalance-totalPoint); err != nil {
+		if err := s.customerRepo.UpdatePointBalance(ctx, customerID, customer.PointBalance-totalPoint); err != nil {
 			return err
 		}
 		trx = &entity.Transaction{
@@ -83,13 +82,28 @@ func (s *RedemptionService) Redeem(
 			UpdatedAt:  time.Now(),
 			Items:      transactionItems,
 		}
-		if err := tx.Create(trx).Error; err != nil {
-			return err
+		// Simpan ke DB hanya jika tx != nil (production)
+		if tx != nil {
+			if err := tx.Create(trx).Error; err != nil {
+				return err
+			}
 		}
 		return nil
-	})
-	if err != nil {
-		return nil, err
+	}
+
+	// Jika ada s.db, lakukan secara transaction (production)
+	if s.db != nil {
+		err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+			return doLogic(tx)
+		})
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		// Jika s.db == nil, jalankan langsung logic tanpa DB transaction (untuk unit test)
+		if err := doLogic(nil); err != nil {
+			return nil, err
+		}
 	}
 	return trx, nil
 }
