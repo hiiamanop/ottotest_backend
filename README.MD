@@ -12,11 +12,6 @@ OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean 
 - Swagger (API Docs, via swaggo/swag)
 - GoMock & Testify (unit testing)
 
-📖 Dokumentasi API (Swagger)
-
-Swagger UI bisa diakses di:
-http://localhost:8080/swagger/index.html
-
 🔗 Contoh Endpoint
 
 1. Customer
