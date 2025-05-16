@@ -1,6 +1,6 @@
 🚀 Overview
-Ottotest Backend adalah layanan RESTful API berbasis Golang (clean architecture) untuk proses redemption voucher dengan sistem point, mendukung multi-brand, multi-voucher, customer, serta atomic transaction.
-Proyek ini dibangun dengan Gin, GORM, PostgreSQL, Docker, dan sepenuhnya terdokumentasi Swagger/OpenAPI.
+
+OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean architecture) untuk proses redemption voucher dengan sistem point, mendukung multi-brand, multi-voucher, customer, serta atomic transaction. Proyek ini dibangun dengan Gin, GORM, PostgreSQL, Docker, dan sepenuhnya terdokumentasi Swagger
 
 🧩 Tech Stack
 
@@ -13,6 +13,7 @@ Proyek ini dibangun dengan Gin, GORM, PostgreSQL, Docker, dan sepenuhnya terdoku
 - GoMock & Testify (unit testing)
 
 📖 Dokumentasi API (Swagger)
+
 Swagger UI bisa diakses di:
 http://localhost:8080/swagger/index.html
 
@@ -66,6 +67,7 @@ http://localhost:8080/swagger/index.html
    - GET /transaction/redemption?transactionId=1
 
 🧪 Unit Testing
+
 Menggunakan GoMock dan Testify untuk isolasi business logic
 
 🎯 Fitur Utama
@@ -78,4 +80,5 @@ Menggunakan GoMock dan Testify untuk isolasi business logic
 6. Dockerized + migration otomatis
 
 📝 Catatan
+
 Semua endpoint dan struktur data lengkap dapat dilihat di Swagger.
