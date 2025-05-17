@@ -1,5 +1,3 @@
-cat > README.md << 'EOF'
-
 # 🚀 Voucher Redemption Service (Backend Test)
 
 Backend API service for voucher redemption, built with Go (Golang), Clean Architecture, PostgreSQL, Docker, and full unit testing.  
