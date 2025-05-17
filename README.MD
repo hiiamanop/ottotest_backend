@@ -1,6 +1,17 @@
+📒 README.md - OttoDigital Test Backend Voucher Redemption
+
 🚀 Overview
 
 OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean architecture) untuk proses redemption voucher dengan sistem point, mendukung multi-brand, multi-voucher, customer, serta atomic transaction. Proyek ini dibangun dengan Gin, GORM, PostgreSQL, Docker, dan sepenuhnya terdokumentasi Swagger
+
+🎯 Fitur Utama
+
+1. Multi-brand & multi-voucher
+2. Redeem voucher dengan validasi point customer
+3. Atomic transaction (unit tested)
+4. Clean architecture (maintainable, scalable)
+5. Dokumentasi API otomatis (Swagger)
+6. Dockerized + migration otomatis
 
 🧩 Tech Stack
 
@@ -11,6 +22,33 @@ OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean 
 - Docker
 - Swagger (API Docs, via swaggo/swag)
 - GoMock & Testify (unit testing)
+
+🛠️ Setup & Instalasi
+
+1. Clone Project
+
+git clone https://github.com/[username]/ottotest_backend.git
+
+cd ottotest_backend
+
+2. Environment (.env)
+
+Buat file .env di root:
+
+- DB_HOST=db
+- DB_PORT=5432
+- DB_USER=postgres
+- DB_PASSWORD=password
+- DB_NAME=ottotest_db
+- DB_SSLMODE=disable
+
+3. Jalankan Dengan Docker
+
+docker-compose up --build
+
+📖 Dokumentasi API (Swagger)
+
+Swagger UI bisa diakses di: http://localhost:8080/swagger/index.html
 
 🔗 Contoh Endpoint
 
@@ -65,15 +103,4 @@ OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean 
 
 Menggunakan GoMock dan Testify untuk isolasi business logic
 
-🎯 Fitur Utama
-
-1. Multi-brand & multi-voucher
-2. Redeem voucher dengan validasi point customer
-3. Atomic transaction (unit tested)
-4. Clean architecture (maintainable, scalable)
-5. Dokumentasi API otomatis (Swagger)
-6. Dockerized + migration otomatis
-
-📝 Catatan
-
-Semua endpoint dan struktur data lengkap dapat dilihat di Swagger.
+go test ./internal/usecase/service
