@@ -1,106 +1,134 @@
-📒 README.md - OttoDigital Test Backend Voucher Redemption
+cat > README.md << 'EOF'
 
-🚀 Overview
+# 🚀 Voucher Redemption Service (Backend Test)
 
-OTTO DIGITAL test Backend ini adalah layanan RESTful API berbasis Golang (clean architecture) untuk proses redemption voucher dengan sistem point, mendukung multi-brand, multi-voucher, customer, serta atomic transaction. Proyek ini dibangun dengan Gin, GORM, PostgreSQL, Docker, dan sepenuhnya terdokumentasi Swagger
+Backend API service for voucher redemption, built with Go (Golang), Clean Architecture, PostgreSQL, Docker, and full unit testing.  
+Submission for Backend Developer Test.
 
-🎯 Fitur Utama
+---
 
-1. Multi-brand & multi-voucher
-2. Redeem voucher dengan validasi point customer
-3. Atomic transaction (unit tested)
-4. Clean architecture (maintainable, scalable)
-5. Dokumentasi API otomatis (Swagger)
-6. Dockerized + migration otomatis
+## ✨ Features
 
-🧩 Tech Stack
+- Clean/Hexagonal Architecture
+- Voucher-Brand, Customer, Transaction entities
+- Redemption transaction logic with point validation
+- Input validation & error handling
+- Database migration
+- Unit tests with gomock
+- Docker & docker-compose ready
+- API documentation with Swagger (OpenAPI)
+- Environment config via .env
 
-- Go (Golang)
-- Gin (HTTP framework)
-- GORM (ORM)
-- PostgreSQL
-- Docker
-- Swagger (API Docs, via swaggo/swag)
-- GoMock & Testify (unit testing)
+---
 
-🛠️ Setup & Instalasi
+## 🚀 Quick Start
 
-1. Clone Project
+**1. Clone Repository & Setup .env**
 
-git clone https://github.com/[username]/ottotest_backend.git
-
+```bash
+git clone https://github.com/your-username/ottotest_backend.git
 cd ottotest_backend
+cp .env.example .env  # Edit if needed (DB credentials, etc)
+```
 
-2. Environment (.env)
+**2. Build & Run all services (App, DB, Migration)**
 
-Buat file .env di root:
-
-- DB_HOST=db
-- DB_PORT=5432
-- DB_USER=postgres
-- DB_PASSWORD=password
-- DB_NAME=ottotest_db
-- DB_SSLMODE=disable
-
-3. Jalankan Dengan Docker
-
+```bash
 docker-compose up --build
+```
 
-📖 Dokumentasi API (Swagger)
+App: http://localhost:8080  
+Swagger: http://localhost:8080/swagger/index.html  
+DB: localhost:5432 (ottotest_db)
 
-Swagger UI bisa diakses di: http://localhost:8080/swagger/index.html
+**3. Run Database Migration (if not auto-run)**
 
-🔗 Contoh Endpoint
+```bash
+docker-compose run migrate
+```
 
-1. Customer
+**4. Run Unit Tests (in local dev)**
 
-   - POST /customer
+```bash
+go test ./internal/...
+```
 
-   {
-   "name": "Budi",
-   "email": "budi@mail.com",
-   "point_balance": 200000
-   }
+## 🧪 API Endpoints
 
-   - GET /customer?id=1
+- POST /brand - Create brand
+- POST /voucher - Create voucher
+- GET /voucher?id={voucher_id} - Get voucher by ID
+- GET /voucher/brand?id={brand_id} - Get all vouchers by brand
+- POST /transaction/redemption - Create redemption transaction (multi-voucher)
+- GET /transaction/redemption?transactionId={id} - Get transaction detail
+- POST /customer - Create customer
+- GET /customer?id={id} - Get customer by ID
 
-2. Brand
-   - POST /brand
-     {
-     "name": "Indomaret",
-     "description": "Minimarket"
-     }
-3. Voucher
+See Swagger UI for full documentation & schema.
 
-   - POST /voucher
+## 🗂️ Project Structure
 
-   {
-   "brand_id": 1,
-   "name": "Voucher 50K",
-   "description": "Voucher belanja",
-   "point_cost": 50000
-   }
+```
+voucher-redemption-service/
+├── cmd/
+│   └── api/
+│       └── main.go
+├── internal/
+│   ├── domain/
+│   │   ├── entity/
+│   │   └── repository/
+│   ├── usecase/
+│   │   └── service/
+│   ├── infrastructure/
+│   │   ├── persistence/
+│   │   └── http/
+│   └── interface/
+│       ├── handler/
+│       └── dto/
+├── pkg/
+│   ├── config/
+│   └── util/
+├── migrations/
+├── Dockerfile
+├── docker-compose.yml
+├── go.mod
+├── go.sum
+└── README.md
+```
 
-   - GET /voucher?id=1
+## ⚙️ Environment Variables
 
-   - GET /voucher/brand?id=1
+Set in .env (see .env.example):
 
-4. Redemption
+- DATABASE_URL
+- APP_PORT
+- etc
 
-   - POST /transaction/redemption
+## 🧪 Testing
 
-   {
-   "customer_id": 1,
-   "vouchers":
-   [
-   { "voucher_id": 1, "quantity": 2 }
-   ]
-   }
+Unit Tests (with gomock):
 
-   - GET /transaction/redemption?transactionId=1
+```bash
+go test ./internal/...
+```
 
-🧪 Unit Testing
+Run inside Docker:
 
-Menggunakan GoMock dan Testify untuk isolasi business logic
+```bash
+docker-compose exec app go test ./internal/...
+```
 
-go test ./internal/usecase/service
+## 📝 Notes
+
+- Default PostgreSQL credentials can be changed in docker-compose.yml and .env.
+- Migrations auto-run on docker-compose up (can be run manually if needed).
+- See migrations/ for SQL schema.
+
+## 👤 Author
+
+Ahmad Naufal Muzakki
+
+## 📄 License
+
+MIT
+EOF
